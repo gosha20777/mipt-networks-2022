@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  front-end:
+    build:
+      context: src
+      dockerfile: Dockerfile
+    container_name: front-end
+    env_file: ./src/.env
+    ports:
+      - 80:5000
+    volumes:
+      - type: bind
+        source: ./src/Server/appsettings.json
+        target: /opt/app/appsettings.json
+        read_only: true
+    networks:
+      - faceapinet
+networks:
+  faceapinet:
+    name: faceapinet
