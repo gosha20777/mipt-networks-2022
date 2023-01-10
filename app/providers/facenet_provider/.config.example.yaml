@@ -1,0 +1,15 @@
+engine_type: facenet
+version:
+  major: 1
+  minor: 0
+  path: 0
+description: facenet provider
+quality_threshold: 0.5
+anti_spoofing_threshold: 0.5
+build:  '5.12.0'
+orchestrator:
+  orchestrator_type: thread
+  params:
+    max_workers: 2
+    min_workers: 1
+base_url: http://facenet-handler:5000/api/v1

@@ -1,0 +1,19 @@
+[flake8]
+
+ignore =
+    E128,
+    W293,
+    W291,
+    T000,
+    PIE786,
+    PIE792
+max_line_length = 79
+per-file-ignores = 
+    */db/*: F401,
+    ./api/v1/models/common.py: N805,
+    ./api/v1/routes/engine.py: E501,
+    ./core/db/models/base.py: N805,
+    ./core/provider/interfaces.py: E501
+exclude =
+    venv/
+pytest-parametrize-names-type = csv

@@ -1,0 +1,15 @@
+engine_type: tevian
+version:
+  major: 1
+  minor: 0
+  path: 0
+description: fake provider
+quality_threshold: 0.5
+anti_spoofing_threshold: 0.5
+build: fake_build_228_lol
+orchestrator:
+  orchestrator_type: thread
+  params:
+    max_workers: 2
+    min_workers: 1
+my_param: lol

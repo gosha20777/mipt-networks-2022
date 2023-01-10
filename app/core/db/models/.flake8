@@ -1,0 +1,16 @@
+[flake8]
+
+ignore =
+    F401,
+    E128,
+    W293,
+    W291,
+    B008,
+    T000,
+    E722,
+    PIE786,
+    PIE792
+max_line_length = 79
+exclude =
+    venv/
+pytest-parametrize-names-type = csv

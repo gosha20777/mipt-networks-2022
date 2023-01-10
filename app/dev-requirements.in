@@ -1,0 +1,8 @@
+-c requirements.txt
+
+flake8
+isort
+yamllint
+
+pep8-naming
+mypy

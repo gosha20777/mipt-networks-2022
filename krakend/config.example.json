@@ -1,0 +1,704 @@
+{
+    "$schema": "https://www.krakend.io/schema/v3.json",
+    "version": 3,
+    "name": "FaceAPI Gateway",
+    "host": [
+        "0.0.0.0"
+    ],
+    "port": 8080,
+    "cache_ttl": "3600s",
+    "timeout": "10s",
+    "extra_config": {
+        "telemetry/logging": {
+            "level": "DEBUG",
+            "prefix": "[GATEWAY]",
+            "syslog": false,
+            "stdout": true
+        },
+        "security/cors": {
+            "allow_origins": [
+                "http://localhost:8080"
+            ],
+            "allow_methods": [
+                "POST",
+                "GET",
+                "PUT",
+                "DELETE"
+            ],
+            "max_age": "12h"
+        },
+        "telemetry/metrics": {
+            "collection_time": "30s",
+            "listen_address": ":8090"
+        }
+    },
+    "endpoints": [
+        {
+            "endpoint": "/api/v1/ping",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/ping",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ]
+        },
+        {
+            "endpoint": "/docs/v1",
+            "method": "GET",
+            "input_query_strings": [
+                "*"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/docs/v1",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ]
+        },
+        {
+            "endpoint": "/docs/v1/openapi.json",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/docs/v1/openapi.json",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ]
+        },
+        {
+            "endpoint": "/static/swagger-ui.css",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/static/swagger-ui.css",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ]
+        },
+        {
+            "endpoint": "/static/swagger-ui-bundle.js",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/static/swagger-ui-bundle.js",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ]
+        },
+        {
+            "endpoint": "/api/v1/token",
+            "method": "POST",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/token",
+                    "method": "POST"
+                }
+            ],
+            "extra_config": {
+                "auth/signer": {
+                    "alg": "HS256",
+                    "kid": "sim2",
+                    "keys_to_sign": [
+                        "access_token"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/users",
+            "method": "GET",
+            "input_query_strings": [
+                "page",
+                "limit"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/users",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/user",
+            "method": "GET",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/user",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/user",
+            "method": "PUT",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/user",
+                    "encoding": "no-op",
+                    "method": "PUT"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/user",
+            "method": "DELETE",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/user",
+                    "encoding": "no-op",
+                    "method": "DELETE"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/user",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/user",
+                    "encoding": "no-op",
+                    "method": "POST"
+                }
+            ]
+        },
+        {
+            "endpoint": "/api/v1/engines",
+            "method": "GET",
+            "input_query_strings": [
+                "page",
+                "limit"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/engines",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/engine",
+            "method": "GET",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/engine",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/engine",
+            "method": "PUT",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/engine",
+                    "encoding": "no-op",
+                    "method": "PUT"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/engine",
+            "method": "DELETE",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/engine",
+                    "encoding": "no-op",
+                    "method": "DELETE"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/engine",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/engine",
+                    "encoding": "no-op",
+                    "method": "POST"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/file",
+            "method": "GET",
+            "input_query_strings": [
+                "hash"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/file",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/file",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/file",
+                    "encoding": "no-op",
+                    "method": "POST"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/task",
+            "method": "GET",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/task",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/task/{operation}",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/task/{operation}",
+                    "encoding": "no-op",
+                    "method": "POST"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/faces",
+            "method": "GET",
+            "input_query_strings": [
+                "page",
+                "limit",
+                "engine_id"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/faces",
+                    "encoding": "no-op",
+                    "method": "GET"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/face",
+            "method": "PUT",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/face",
+                    "encoding": "no-op",
+                    "method": "PUT"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/api/v1/face",
+            "method": "DELETE",
+            "input_query_strings": [
+                "uuid"
+            ],
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "host": [
+                        "http://face_api:5000"
+                    ],
+                    "url_pattern": "/api/v1/face",
+                    "encoding": "no-op",
+                    "method": "DELETE"
+                }
+            ],
+            "extra_config": {
+                "auth/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "greenatom.ru"
+                    ],
+                    "issuer": "greenatom.ru",
+                    "roles_key": "roles",
+                    "roles": [
+                        "user",
+                        "admin",
+                        "root"
+                    ],
+                    "jwk_url": "http://static_data:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        }
+    ]
+}
